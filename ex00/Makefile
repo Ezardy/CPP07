@@ -1,6 +1,6 @@
 all: test
 
-src=Base real_type test
+src=main
 obj=$(addsuffix .o, $(src))
 
 test: $(obj)
