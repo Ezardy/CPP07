@@ -7,6 +7,7 @@
 
 #define TEST_START(func_name)                           \
 	static bool func_name() {                           \
+		bool			   caught = true;               \
 		bool			   success = true;              \
 		const std::string  _func_name = #func_name;     \
 		std::streambuf*	   old = std::cout.rdbuf();     \
@@ -21,6 +22,7 @@
 		std::cerr.rdbuf(ess.rdbuf());
 #define TEST_LOGIC_START try {
 #define TEST_LOGIC_END                                                                         \
+	(void)caught;                                                                              \
 	std::cout.rdbuf(old);                                                                      \
 	std::cerr.rdbuf(oldCerr);                                                                  \
 	if (!(success = success && expected == oss.str() && cerrExpected == ess.str())) {          \
@@ -62,18 +64,28 @@
 							   + ess.str() + "EXPECTED STDERR:\n" + X);
 
 #define TEST_EXCEPTION(X, E)                                                                 \
-	bool caught = false;                                                                     \
+	caught = false;                                                                          \
 	try {                                                                                    \
 		X;                                                                                   \
 	} catch (const E& e) {                                                                   \
 		caught = true;                                                                       \
 	} catch (const std::exception& e) {                                                      \
-		throw std::bad_exception(                                                            \
+		throw std::logic_error(                                                              \
 			std::string("Wrong exception catched:" TEST_EXPAND_AND_STRINGIFY(__LINE__) ": ") \
 			+ e.what());                                                                     \
 	}                                                                                        \
 	if (!caught)                                                                             \
-		throw std::bad_exception("No exception was catched");
+		throw std::logic_error("No exception was catched:" TEST_EXPAND_AND_STRINGIFY(__LINE__));
+
+#define TEST_ANY_EXCEPTION(X)           \
+	caught = false;                     \
+	try {                               \
+		X;                              \
+	} catch (const std::exception& e) { \
+		caught = true;                  \
+	}                                   \
+	if (!caught)                        \
+		throw std::logic_error("No exception was catched:" TEST_EXPAND_AND_STRINGIFY(__LINE__));
 
 #define CURRENT_STDOUT oss.str()
 
