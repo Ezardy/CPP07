@@ -14,8 +14,8 @@ public:
 	~Array(void) throw();
 
 	Array&	 operator=(Array const& other) throw(std::bad_alloc);
-	T&		 operator[](unsigned idx) throw(std::exception);
-	T const& operator[](unsigned idx) const throw(std::exception);
+	T&		 operator[](long idx) throw(std::exception);
+	T const& operator[](long idx) const throw(std::exception);
 
 	unsigned size(void) const throw();
 

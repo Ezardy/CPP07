@@ -36,16 +36,16 @@ Array<T>::~Array(void) throw() {
 }
 
 template<typename T>
-T& Array<T>::operator[](unsigned idx) throw(std::exception) {
-	if (idx < s)
+T& Array<T>::operator[](long idx) throw(std::exception) {
+	if (idx >= 0 && idx < s)
 		return arr[idx];
 	else
 		throw std::exception();
 }
 
 template<typename T>
-T const& Array<T>::operator[](unsigned idx) const throw(std::exception) {
-	if (idx < s)
+T const& Array<T>::operator[](long idx) const throw(std::exception) {
+	if (idx >= 0 && idx < s)
 		return arr[idx];
 	else
 		throw std::exception();
